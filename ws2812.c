@@ -72,6 +72,11 @@ void set_one_led(uint8_t r, uint8_t g, uint8_t b, int numExibir)
     }
 }
 
+void ligarMatrizLeds(){
+    //implementar a logica de exibição do numero na matriz, utilize o contador "contador_numero_a_exibir"
+    set_one_led(led_r, led_g, led_b, contador_numero_a_exibir);
+}
+
 int main()
 {   
     stdio_init_all();
@@ -104,10 +109,6 @@ int main()
     }
 
     return 0;
-}
-
-void ligarMatrizLeds(){
-    //implementar a logica de exibição do numero na matriz, utilize o contador "contador_numero_a_exibir"
 }
 
 void blinkarLedVermelho(){
