@@ -103,7 +103,8 @@ int main()
     while (1)
     {   
         ligarMatrizLeds();
-        blinkarLedVermelho();        
+        blinkarLedVermelho();
+        sleep_ms(100); // Adicionei um delay para evitar que o loop rode muito rápido
     }
 
     return 0;
