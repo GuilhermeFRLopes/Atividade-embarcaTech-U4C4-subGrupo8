@@ -20,7 +20,7 @@ const uint button_B = 6; // Botão B = 6
 // Variável global para armazenar a cor (Entre 0 e 255 para intensidade)
 uint8_t led_r = 0; // Intensidade do vermelho
 uint8_t led_g = 0; // Intensidade do verde
-uint8_t led_b = 5; // Intensidade do azul
+uint8_t led_b = 255; // Intensidade do azul
 
 // Buffer para armazenar quais LEDs estão ligados matriz 5x5
 bool led_buffer[NUM_PIXELS] = {
