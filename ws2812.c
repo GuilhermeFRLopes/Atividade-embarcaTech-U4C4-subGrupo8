@@ -33,6 +33,9 @@ bool led_buffer[NUM_PIXELS] = {
 
 bool* numeros[10] = {numeroZero, numeroUm, numeroDois, numeroTres, numeroQuatro, numeroCinco, numeroSeis, numeroSete, numeroOito, numeroNove};
 
+void ligarMatrizLeds();
+void blinkarLedVermelho();
+bool debouncing();
 static void gpio_irq_handler_buttonA(uint gpio, uint32_t events);
 static void gpio_irq_handler_buttonB(uint gpio, uint32_t events);
 
