@@ -120,7 +120,14 @@ void blinkarLedVermelho(){
 }
 
 bool debouncing(){
-//implementar o debouncing
+    //implementar o debouncing
+    static uint32_t last_time = 0;
+    uint32_t current_time = to_ms_since_boot(get_absolute_time());
+    if (current_time - last_time < 200) {
+        return false;
+    }
+    last_time = current_time;
+    return true;
 
 }
 
