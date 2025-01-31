@@ -11,7 +11,7 @@
 #define WS2812_PIN 7
 #define tempo 400
 
-int contador_numero_a_exibir = 0;
+static volatile int contador_numero_a_exibir = 0;
 
 const uint led_pin_red   = 13; //Led rgb vermelho
 const uint button_A = 5; // Botão A = 5
