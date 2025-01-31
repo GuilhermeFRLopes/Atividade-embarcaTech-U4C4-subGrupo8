@@ -115,9 +115,29 @@ void ligarMatrizLeds(){
     set_one_led(led_r, led_g, led_b, contador_numero_a_exibir);
 }
 
-void blinkarLedVermelho(){
-    //implementar a logica do LED Vermelho
 
+void blinkarLedVermelho() {
+    static bool led_state = false; // Estado do LED (ligado/desligado)
+    static absolute_time_t last_time = {0}; // Última vez que o LED mudou de estado
+
+    // Obtenha o tempo atual
+    absolute_time_t current_time = get_absolute_time();
+
+    // Verifique se se passaram 100 ms (0.1 segundos) desde a última vez que o LED mudou de estado
+    if (absolute_time_diff_us(last_time, current_time) >= 100000) {
+        // Troque o estado do LED (ligado -> desligado ou desligado -> ligado)
+        led_state = !led_state;
+
+        // Atualize a cor do LED RGB
+        if (led_state) {
+            gpio_put(led_pin_red, 1); // Liga o LED vermelho
+        } else {
+            gpio_put(led_pin_red, 0); // Desliga o LED vermelho
+        }
+
+        // Atualize o tempo da última mudança de estado
+        last_time = current_time;
+    }
 }
 
 bool debouncing(){
