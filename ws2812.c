@@ -16,7 +16,6 @@ static volatile int contador_numero_a_exibir = 0;
 const uint led_pin_red   = 13; //Led rgb vermelho
 const uint button_A = 5; // Botão A = 5
 const uint button_B = 6; // Botão B = 6
-
 // Variável global para armazenar a cor (Entre 0 e 255 para intensidade)
 uint8_t led_r = 0; // Intensidade do vermelho
 uint8_t led_g = 0; // Intensidade do verde
@@ -36,8 +35,8 @@ bool* numeros[10] = {numeroZero, numeroUm, numeroDois, numeroTres, numeroQuatro,
 void ligarMatrizLeds();
 void blinkarLedVermelho();
 bool debouncing();
-static void gpio_irq_handler_buttonA(uint gpio, uint32_t events);
-static void gpio_irq_handler_buttonB(uint gpio, uint32_t events);
+//uma única rotina de interrupção para simplificar a lógica do software
+static void gpio_irq_handler(uint gpio, uint32_t events);
 
 static inline void put_pixel(uint32_t pixel_grb)
 {
@@ -78,7 +77,6 @@ void set_one_led(uint8_t r, uint8_t g, uint8_t b, int numExibir)
 int main()
 {   
     stdio_init_all();
-
     int contador = 0;
     PIO pio = pio0;
     int sm = 0;
@@ -97,13 +95,14 @@ int main()
     gpio_set_dir(button_B, GPIO_IN); // Configura o pino como entrada
     gpio_pull_up(button_B);
 
-    gpio_set_irq_enabled_with_callback(button_A, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler_buttonA);
-    gpio_set_irq_enabled_with_callback(button_B, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler_buttonB);
+    gpio_set_irq_enabled_with_callback(button_A, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
+    gpio_set_irq_enabled_with_callback(button_B, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler);
 
     while (1)
     {   
         ligarMatrizLeds();
-        blinkarLedVermelho();        
+        blinkarLedVermelho();
+        sleep_ms(100); // Adicionei um delay para evitar que o loop rode muito rápido
     }
 
     return 0;
@@ -120,23 +119,26 @@ void blinkarLedVermelho(){
 }
 
 bool debouncing(){
-//implementar o debouncing
+    //implementar o debouncing
+    static uint32_t last_time = 0;
+    uint32_t current_time = to_ms_since_boot(get_absolute_time());
+    if (current_time - last_time < 200) {
+        return false;
+    }
+    last_time = current_time;
+    return true;
 
 }
 
-void gpio_irq_handler_buttonA(uint gpio, uint32_t events)
+void gpio_irq_handler(uint gpio, uint32_t events)
 {
-    //implementar a funçao do botao A
-    if (debouncing()){
+    if (!debouncing()) 
+        return;
 
-    }
+
+
     
-}
-
-void gpio_irq_handler_buttonB(uint gpio, uint32_t events)
-{
-    //implementar a funçao do botao B
-    if (debouncing()){
-
-    }
+    if(gpio == button_B && contador_numero_a_exibir) // se maior q zero
+        contador_numero_a_exibir--;
+    printf("Contador: %d\n", contador_numero_a_exibir);
 }
