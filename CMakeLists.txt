@@ -27,6 +27,8 @@ include(pico_sdk_import.cmake)
 project(ws2812 C CXX ASM)
 pico_sdk_init()
 add_executable(ws2812 ws2812.c )
+pico_enable_stdio_uart(ws2812 1)  # Desativa UART
+pico_enable_stdio_usb(ws2812 1)   # Habilita USB
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/generated)
 pico_generate_pio_header(ws2812 ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/generated)
 target_sources(ws2812 PRIVATE ws2812.c)
